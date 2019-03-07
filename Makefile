@@ -173,7 +173,7 @@ build-nim: | deps
 #- allows parallel building with the '+' prefix
 #- TODO: rebuild the Nim compiler after the corresponding submodule is updated
 $(NIM_BINARY) update:
-	git submodule update --init --recursive
+	git submodule update --init --recursive --remote
 	rm -rf $(NIMBLE_DIR)
 	+ [ -e $(NIM_BINARY) ] || { $(BUILD_NIM); }
 
