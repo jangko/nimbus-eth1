@@ -72,7 +72,7 @@ proc execComputation*(computation: var BaseComputation): bool =
     result = fork.applyMessage(computation, Call)
 
   computation.vmState.mutateStateDB:
-    for deletedAccount in computation.getAccountsForDeletion:
+    for deletedAccount in computation.accountsForDeletion:
       db.deleteAccount deletedAccount
 
   if result:
