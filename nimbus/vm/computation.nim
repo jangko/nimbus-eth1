@@ -152,20 +152,10 @@ proc applyMessage(computation: var BaseComputation, opCode: static[Op]): bool =
     snapshot.commit()
   except VMError:
     snapshot.revert(true)
-    debug "VMError applyMessage failed",
+    debug "applyMessage failed",
       msg = computation.error.info,
       depth = computation.msg.depth
-  except EVMError:
-    snapshot.revert() # TODO: true or false?
-    debug "EVMError applyMessage failed",
-      msg = computation.error.info,
-      depth = computation.msg.depth
-  except ValueError:
-    snapshot.revert(true)
-    debug "ValueError applyMessage failed",
-      msg = computation.error.info,
-      depth = computation.msg.depth
-      
+
   result = not computation.isError
 
 proc writeContract*(computation: var BaseComputation, fork: Fork): bool =
