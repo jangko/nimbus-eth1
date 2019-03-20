@@ -64,12 +64,10 @@ proc setupComputation*(vmState: BaseVMState, tx: Transaction, sender, recipient:
   doAssert result.isOriginComputation
 
 proc execComputation*(computation: var BaseComputation): bool =
-  let fork = computation.getFork
-
   if computation.msg.isCreate:
-    result = fork.applyMessage(computation, Create)
+    result = computation.applyMessage(Create)
   else:
-    result = fork.applyMessage(computation, Call)
+    result = computation.applyMessage(Call)
 
   computation.vmState.mutateStateDB:
     for deletedAccount in computation.accountsForDeletion:
