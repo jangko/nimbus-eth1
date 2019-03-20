@@ -162,7 +162,7 @@ proc transferBalance(computation: var BaseComputation, opCode: static[Op]): bool
 
   result = true
 
-proc executeOpcodes*(computation: var BaseComputation)
+proc executeOpcodes*(computation: var BaseComputation) {.gcsafe.}
 
 proc applyMessage*(fork: Fork, computation: var BaseComputation, opCode: static[Op]): bool =
   var snapshot = computation.snapshot()
