@@ -106,7 +106,6 @@ jobs:
           'Windows')
             ncpu=${NUMBER_OF_PROCESSORS}
             CD=${PWD:1:1}
-            cmd=wmic logicaldisk get name,size,freespace | grep 
             echo "Number of cores: ${NUMBER_OF_PROCESSORS}"
             echo "Physical memory: $(wmic ComputerSystem get TotalPhysicalMemory)"
             echo -e "Partition sizes:\n$(wmic logicaldisk get name,size,freespace | grep -e "${CD^}" -e "FreeSpace")"
