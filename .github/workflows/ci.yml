@@ -91,12 +91,21 @@ jobs:
           case '${{ runner.os }}' in
           'Linux')
             ncpu=$(nproc)
+            echo "Number of cores: ${ncpu}"
+            echo "Physical memory: $(grep MemTotal /proc/meminfo)"
+            echo "Partition sizes: $(df -k -h .)"
             ;;
           'macOS')
             ncpu=$(sysctl -n hw.ncpu)
+            echo "Number of cores: ${ncpu}"
+            echo "Physical memory: $(grep MemTotal /proc/meminfo)"
+            echo "Partition sizes: $(df -k -h .)"
             ;;
           'Windows')
             ncpu=${NUMBER_OF_PROCESSORS}
+            echo "Number of cores: ${NUMBER_OF_PROCESSORS}"
+            echo "Physical memory: $(wmic ComputerSystem get TotalPhysicalMemory)"
+            echo "Partition sizes: $(wmic partition get name,size,type)"
             ;;
           esac
           [[ -z "$ncpu" || $ncpu -le 0 ]] && ncpu=1
