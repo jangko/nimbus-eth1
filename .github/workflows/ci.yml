@@ -92,17 +92,20 @@ jobs:
           'Linux')
             ncpu=$(nproc)
             echo "Number of cores: ${ncpu}"
-            echo "Physical memory: $(grep MemTotal /proc/meminfo)"
-            echo "Partition sizes: $(df -k -h .)"
+            echo "$(grep MemTotal /proc/meminfo)"
+            echo "Partition sizes:\n$(df -k -h .)"
             ;;
           'macOS')
             ncpu=$(sysctl -n hw.ncpu)
+            hwmemsize=$(sysctl -n hw.memsize)
+            ramsize=$(expr $hwmemsize / $((1024**3)))
             echo "Number of cores: ${ncpu}"
-            echo "Physical memory: $(grep MemTotal /proc/meminfo)"
-            echo "Partition sizes: $(df -k -h .)"
+            echo "Physical memory: $(ramsize) GB"
+            echo "Partition sizes:\n$(df -k -h .)"
             ;;
           'Windows')
             ncpu=${NUMBER_OF_PROCESSORS}
+            echo "${PWD}"
             echo "Number of cores: ${NUMBER_OF_PROCESSORS}"
             echo "Physical memory: $(wmic ComputerSystem get TotalPhysicalMemory)"
             echo "Partition sizes: $(wmic partition get name,size,type)"
