@@ -29,7 +29,7 @@ For more detailed write-ups on the development progress, follow the
 
 ### Prerequisites
 
-* GNU Make, Bash and the usual POSIX utilities. Git 2.9.4 or newer.
+* GNU Make, Bash and the usual POSIX utilities. Git 2.10.4 or newer.
 
 #### Obtaining the prerequisites through the Nix package manager
 
