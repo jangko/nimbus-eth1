@@ -814,6 +814,17 @@ suite "TxPool test suite":
       tx = mx.createPooledTransactionWithBlob(acc, recipient, amount, 0)
 
     check tx.blobsBundle.wrapperVersion == WrapperVersionEIP4844
+    xp.checkAddTx(tx)
+
+  test "EIP-4844 BlobsBundle on Shanghai":
+    let
+      env = initEnv(Shanghai)
+      xp = env.xp
+      mx = env.sender
+      acc = mx.getAccount(0)
+      tx = mx.createPooledTransactionWithBlob(acc, recipient, amount, 0)
+
+    check tx.blobsBundle.wrapperVersion == WrapperVersionEIP4844
     xp.checkAddTx(tx, txErrorInvalidBlob)
 
   test "EIP-7594 BlobsBundle on Osaka":
