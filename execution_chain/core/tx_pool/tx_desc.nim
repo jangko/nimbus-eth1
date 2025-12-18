@@ -241,8 +241,8 @@ proc validateBlobTransactionWrapper(tx: PooledTransaction, fork: EVMFork):
 
   case tx.blobsBundle.wrapperVersion
   of WrapperVersionEIP4844:
-    if fork >= FkOsaka:
-      return err("Blobsbundle version 0 expect fork before Osaka")
+    if fork < FkCancun:
+      return err("Blobsbundle version 0 expect Cancun or later")
     validateBlobTransactionWrapper4844(tx)
   of WrapperVersionEIP7594:
     # Allow this kind of Blob when Prague still active.
