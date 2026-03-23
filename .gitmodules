@@ -243,3 +243,6 @@
 	url = https://github.com/vacp2p/nim-intops.git
 	ignore = untracked
 	branch = master
+[submodule "vendor/nim-lsquic"]
+	path = vendor/nim-lsquic
+	url = https://github.com/vacp2p/nim-lsquic
