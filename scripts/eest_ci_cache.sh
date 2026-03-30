@@ -83,6 +83,27 @@ download_and_extract() {
   cd "${REPO_DIR}"
 }
 
+# Define the lock file path
+LOCK_FILE="/tmp/myscript.lock"
+
+# Open a file descriptor (e.g., 200) to the lock file
+# Using exec ensures the file descriptor remains open for the life of the script/shell
+exec 200>|"$LOCK_FILE"
+
+# Acquire an exclusive lock (option -x). By default, flock waits indefinitely.
+# The '|| exit 1' will cause the script to exit if the flock command itself fails,
+# though waiting should prevent this in most cases.
+flock -x 200 || exit 1
+
+# --- CRITICAL SECTION: Your script's main commands go here ---
+echo "Lock acquired. Performing exclusive tasks..."
+
 # Download stable and develop versions
 download_and_extract "${EEST_DEVELOP_URL}" "${EEST_DEVELOP_DIR}" "${EEST_DEVELOP_NAME}" "${EEST_DEVELOP_VERSION}" "${EEST_DEVELOP_ARCHIVE}"
 download_and_extract "${EEST_BAL_URL}" "${EEST_BAL_DIR}" "${EEST_BAL_NAME}" "${EEST_BAL_VERSION}" "${EEST_BAL_ARCHIVE}"
+
+echo "Tasks finished. Releasing lock."
+# -----------------------------------------------------------
+
+# The lock is automatically released when the script exits and
+# the file descriptor 200 is closed.
