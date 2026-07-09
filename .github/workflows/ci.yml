@@ -113,7 +113,7 @@ jobs:
       run:
         shell: bash
 
-    name: ${{ matrix.os }}-${{ matrix.cpu }}${{ matrix.branch != '' && ' (Nim ' || '' }}${{ matrix.branch-short }}${{ matrix.branch != '' && ')' || '' }}
+    name: EEST-${{ matrix.os }}-${{ matrix.cpu }}${{ matrix.branch != '' && ' (Nim ' || '' }}${{ matrix.branch-short }}${{ matrix.branch != '' && ')' || '' }}
     runs-on: ${{ matrix.builder }}
     steps:
       - name: Checkout nimbus-eth1
@@ -140,4 +140,6 @@ jobs:
         run: |
           ./env.sh nim --version
           gcc --version
+          DEFAULT_MAKE_FLAGS="-j${ncpu} ROCKSDB_CI_CACHE=RocksBinCache"
+          make ${DEFAULT_MAKE_FLAGS} rocksdb          
           make eest_full_test
