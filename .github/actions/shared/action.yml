@@ -106,9 +106,9 @@ runs:
           mingw-llvm-21-${{ matrix.cpu }}-${{ matrix.os }}-master
 
     - name: Install llvm-mingw dependency (Windows)
-      if: >
-        ${{ steps.windows-mingw-cache.outputs.cache-matched-key != '' &&
-        runner.os == 'Windows' && inputs.llvm-mingw == 'true' }}
+      if: |
+        steps.windows-mingw-cache.outputs.cache-matched-key != '' &&
+        runner.os == 'Windows' && inputs.llvm-mingw == 'true'
       shell: bash
       run: |
         mkdir -p external
@@ -126,9 +126,9 @@ runs:
         mv external/mingw-${{ matrix.cpu }}/**/* ./external/mingw-${{ matrix.cpu }}
 
     - name: Save llvm-mingw (Windows) to cache
-      if: >
-        ${{ steps.windows-mingw-cache.outputs.cache-matched-key == '' &&
-        runner.os == 'Windows' && inputs.llvm-mingw == 'true' }}
+      if: |
+        steps.windows-mingw-cache.outputs.cache-matched-key == '' &&
+        runner.os == 'Windows' && inputs.llvm-mingw == 'true'
       uses: actions/cache/save@v6
       with:
         path: external/mingw-${{ matrix.cpu }}
@@ -196,15 +196,15 @@ runs:
           eest-${{ hashFiles('scripts/eest_ci_cache.sh') }}-master
 
     - name: Download EEST fixtures if not exists
-      if: >
-        ${{ steps.eest-cache.outputs.cache-matched-key != '' &&
-        inputs.eest-cache == 'true' }}
+      if: |
+        steps.eest-cache.outputs.cache-matched-key != '' &&
+        inputs.eest-cache == 'true'
       shell: bash
       run: |
         scripts/eest_ci_cache.sh
 
     - name: Save EEST test vectors to cache
-      if: ${{ steps.eest-cache.outputs.cache-matched-key == '' }}
+      if: steps.eest-cache.outputs.cache-matched-key == ''
       uses: actions/cache/save@v6
       with:
         path: |
