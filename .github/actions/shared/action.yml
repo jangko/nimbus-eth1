@@ -107,7 +107,7 @@ runs:
 
     - name: Install llvm-mingw dependency (Windows)
       if: |
-        steps.windows-mingw-cache.outputs.cache-matched-key != '' &&
+        steps.windows-mingw-cache.outputs.cache-matched-key == '' &&
         runner.os == 'Windows' && inputs.llvm-mingw == 'true'
       shell: bash
       run: |
@@ -197,7 +197,7 @@ runs:
 
     - name: Download EEST fixtures if not exists
       if: |
-        steps.eest-cache.outputs.cache-matched-key != '' &&
+        steps.eest-cache.outputs.cache-matched-key == '' &&
         inputs.eest-cache == 'true'
       shell: bash
       run: |
