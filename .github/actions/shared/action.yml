@@ -132,7 +132,7 @@ runs:
       uses: actions/cache/save@v6
       with:
         path: external/mingw-${{ matrix.cpu }}
-        key: mingw-llvm-21-${{ matrix.cpu }}-${{ matrix.os }}-${{ github.ref_name }}
+        key: ${{ steps.windows-mingw-cache.outputs.cache-primary-key }}
 
     - name: Path to cached dependencies (Windows)
       if: >
@@ -188,15 +188,17 @@ runs:
           tests/fixtures/eest_mainnet
           tests/fixtures/eest_devnet
           tests/fixtures/eest_zkevm
+        enableCrossOsArchive: true
         # EEST release version contained in eest_ci_cache.sh.
         # Each time we bump EEST version, it should invalidate the cache too.
         key: eest-${{ hashFiles('scripts/eest_ci_cache.sh') }}-${{ github.ref_name }}
-        enableCrossOsArchive: true
         restore-keys: |
           eest-${{ hashFiles('scripts/eest_ci_cache.sh') }}-master
 
     - name: Download EEST fixtures if not exists
-      if: inputs.eest-cache == 'true'
+      if: >
+        steps.eest-cache.outputs.cache-hit != 'true' &&
+        inputs.eest-cache == 'true'
       shell: bash
       run: |
         scripts/eest_ci_cache.sh
@@ -210,4 +212,4 @@ runs:
           tests/fixtures/eest_devnet
           tests/fixtures/eest_zkevm
         enableCrossOsArchive: true
-        key: eest-${{ hashFiles('scripts/eest_ci_cache.sh') }}-${{ github.ref_name }}
+        key: ${{ steps.eest-cache.outputs.cache-primary-key }}
