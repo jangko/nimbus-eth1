@@ -103,7 +103,7 @@ runs:
         path: external/mingw-${{ matrix.cpu }}
         key: mingw-llvm-21-${{ matrix.cpu }}-${{ matrix.os }}-${{ github.ref_name }}
         restore-keys: |
-          mingw-llvm-21-${{ matrix.cpu }}-${{ matrix.os }}-apple
+          mingw-llvm-21-${{ matrix.cpu }}-${{ matrix.os }}-master
 
     - name: Install llvm-mingw dependency (Windows)
       if: >
@@ -126,7 +126,9 @@ runs:
         mv external/mingw-${{ matrix.cpu }}/**/* ./external/mingw-${{ matrix.cpu }}
 
     - name: Save llvm-mingw (Windows) to cache
-      if: steps.windows-mingw-cache.cache-matched-key == ''
+      if: >
+        steps.windows-mingw-cache.outputs.cache-matched-key == '' &&
+        runner.os == 'Windows' && inputs.llvm-mingw == 'true'
       uses: actions/cache/save@v6
       with:
         path: external/mingw-${{ matrix.cpu }}
@@ -191,7 +193,7 @@ runs:
         key: eest-${{ hashFiles('scripts/eest_ci_cache.sh') }}-${{ github.ref_name }}
         enableCrossOsArchive: true
         restore-keys: |
-          eest-${{ hashFiles('scripts/eest_ci_cache.sh') }}-apple
+          eest-${{ hashFiles('scripts/eest_ci_cache.sh') }}-master
 
     - name: Download EEST fixtures if not exists
       if: inputs.eest-cache == 'true'
@@ -200,11 +202,12 @@ runs:
         scripts/eest_ci_cache.sh
 
     - name: Save EEST test vectors to cache
-      if: steps.eest-cache.cache-matched-key == ''
+      if: steps.eest-cache.outputs.cache-matched-key == ''
       uses: actions/cache/save@v6
       with:
         path: |
           tests/fixtures/eest_mainnet
           tests/fixtures/eest_devnet
           tests/fixtures/eest_zkevm
+        enableCrossOsArchive: true
         key: eest-${{ hashFiles('scripts/eest_ci_cache.sh') }}-${{ github.ref_name }}
